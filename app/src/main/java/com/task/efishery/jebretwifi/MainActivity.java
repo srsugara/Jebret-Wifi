@@ -1,119 +1,94 @@
 package com.task.efishery.jebretwifi;
 
-import android.annotation.SuppressLint;
-import android.app.Dialog;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.net.wifi.ScanResult;
-import android.net.wifi.WifiConfiguration;
-import android.net.wifi.WifiManager;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.support.v7.widget.Toolbar;
+import it.neokree.materialtabs.MaterialTab;
+import it.neokree.materialtabs.MaterialTabHost;
+import it.neokree.materialtabs.MaterialTabListener;
 
-import java.util.List;
+public class MainActivity extends AppCompatActivity implements MaterialTabListener {
 
-public class MainActivity extends AppCompatActivity {
-    WifiManager wifiManager;
-    ListView list;
-    String wifis[];
-    EditText pass;
+    MaterialTabHost tabHost;
+    ViewPager viewPager;
+    TabMenuAdapter androidAdapter;
+    Toolbar toolBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        list=(ListView) findViewById(R.id.listview);
-        getWifi();
-        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                // selected item
-                String ssid = ((TextView) view).getText().toString();
-                connectToWifi(ssid);
-                Toast.makeText(MainActivity.this,"Wifi SSID : "+ssid,Toast.LENGTH_SHORT).show();
+        //android toolbar
+        toolBar = (android.support.v7.widget.Toolbar) this.findViewById(R.id.toolBar);
+        this.setSupportActionBar(toolBar);
 
-            }
-        });
-    }
+        //tab host
+        tabHost = (MaterialTabHost) this.findViewById(R.id.tabHost);
+        viewPager = (ViewPager) this.findViewById(R.id.viewPager);
 
-    private void getWifi(){
-        IntentFilter filter = new IntentFilter();
-        filter.addAction(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION);
-        wifiManager =
-                (WifiManager)getApplicationContext().getSystemService(Context.WIFI_SERVICE);
-        registerReceiver(new BroadcastReceiver(){
-
-            @SuppressLint("UseValueOf") @Override
-            public void onReceive(Context context, Intent intent) {
-                List<ScanResult> wifiScanList = wifiManager.getScanResults();
-                wifis = new String[wifiScanList.size()];
-                for(int i = 0; i < wifiScanList.size(); i++){
-                    wifis[i] = ((wifiScanList.get(i)).toString());
-                }
-                String filtered[] = new String[wifiScanList.size()];
-                int counter = 0;
-                for (String eachWifi : wifis) {
-                    String[] temp = eachWifi.split(",");
-
-                    filtered[counter] = temp[0].substring(5).trim();//+"\n" + temp[2].substring(12).trim()+"\n" +temp[3].substring(6).trim();//0->SSID, 2->Key Management 3-> Strength
-
-                    counter++;
-
-                }
-                list.setAdapter(new ArrayAdapter<String>(getApplicationContext(),R.layout.list_item,R.id.label, filtered));
-            }
-
-        },filter);
-        wifiManager.startScan();
-    }
-
-    private void connectToWifi(final String wifiSSID) {
-        final Dialog dialog = new Dialog(this);
-        dialog.setContentView(R.layout.dialog_connect);
-        dialog.setTitle("Connect to Network");
-        TextView textSSID = (TextView) dialog.findViewById(R.id.textSSID1);
-
-        Button dialogButton = (Button) dialog.findViewById(R.id.okButton);
-        pass = (EditText) dialog.findViewById(R.id.textPassword);
-        textSSID.setText(wifiSSID);
-
-        // if button is clicked, connect to the network;
-        dialogButton.setOnClickListener(new View.OnClickListener() {
+        //adapter view
+        androidAdapter = new TabMenuAdapter(getSupportFragmentManager());
+        viewPager.setAdapter(androidAdapter);
+        viewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
             @Override
-            public void onClick(View v) {
-                String checkPassword = pass.getText().toString();
-                finallyConnect(checkPassword, wifiSSID);
-                dialog.dismiss();
+            public void onPageSelected(int tabposition) {
+                tabHost.setSelectedNavigationItem(tabposition);
             }
         });
-        dialog.show();
+
+        //for tab position
+        for (int i = 0; i < androidAdapter.getCount(); i++) {
+            tabHost.addTab(
+                    tabHost.newTab()
+                            .setText(androidAdapter.getPageTitle(i))
+                            .setTabListener(this)
+            );
+        }
     }
 
-    private void finallyConnect(String networkPass, String networkSSID) {
-        WifiConfiguration wifiConfig = new WifiConfiguration();
-        wifiConfig.SSID = String.format("\"%s\"", networkSSID);
-        wifiConfig.preSharedKey = String.format("\"%s\"", networkPass);
+    //tab on selected
+    @Override
+    public void onTabSelected(MaterialTab materialTab) {
 
-        // remember id
-        int netId = wifiManager.addNetwork(wifiConfig);
-        wifiManager.disconnect();
-        wifiManager.enableNetwork(netId, true);
-        wifiManager.reconnect();
-
-        WifiConfiguration conf = new WifiConfiguration();
-        conf.SSID = "\"\"" + networkSSID + "\"\"";
-        conf.preSharedKey = "\"" + networkPass + "\"";
-        wifiManager.addNetwork(conf);
+        viewPager.setCurrentItem(materialTab.getPosition());
     }
 
+    //tab on reselected
+    @Override
+    public void onTabReselected(MaterialTab materialTab) {
+
+    }
+
+    //tab on unselected
+    @Override
+    public void onTabUnselected(MaterialTab materialTab) {
+
+    }
+
+    // view pager adapter
+    private class ViewPagerAdapter extends FragmentStatePagerAdapter {
+
+        public ViewPagerAdapter(FragmentManager fragmentManager) {
+            super(fragmentManager);
+        }
+
+        public Fragment getItem(int num) {
+            return new QuoteFragment();
+        }
+
+        @Override
+        public int getCount() {
+            return 8;
+        }
+
+        @Override
+        public CharSequence getPageTitle(int tabposition) {
+            return "Tab " + tabposition;
+        }
+    }
 }
