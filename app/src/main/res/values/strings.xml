@@ -3,4 +3,8 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="base_url">http://api.forismatic.com/</string>
+    <string name="method">getQuote</string>
+    <string name="lang">en</string>
+    <string name="format">json</string>
 </resources>
