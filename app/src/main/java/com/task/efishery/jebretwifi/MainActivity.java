@@ -1,17 +1,21 @@
 package com.task.efishery.jebretwifi;
 
 import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.wifi.ScanResult;
+import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -22,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
     WifiManager wifiManager;
     ListView list;
     String wifis[];
+    EditText pass;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
 
                 // selected item
                 String ssid = ((TextView) view).getText().toString();
+                connectToWifi(ssid);
                 Toast.makeText(MainActivity.this,"Wifi SSID : "+ssid,Toast.LENGTH_SHORT).show();
 
             }
@@ -70,4 +76,44 @@ public class MainActivity extends AppCompatActivity {
         },filter);
         wifiManager.startScan();
     }
+
+    private void connectToWifi(final String wifiSSID) {
+        final Dialog dialog = new Dialog(this);
+        dialog.setContentView(R.layout.dialog_connect);
+        dialog.setTitle("Connect to Network");
+        TextView textSSID = (TextView) dialog.findViewById(R.id.textSSID1);
+
+        Button dialogButton = (Button) dialog.findViewById(R.id.okButton);
+        pass = (EditText) dialog.findViewById(R.id.textPassword);
+        textSSID.setText(wifiSSID);
+
+        // if button is clicked, connect to the network;
+        dialogButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String checkPassword = pass.getText().toString();
+                finallyConnect(checkPassword, wifiSSID);
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
+    }
+
+    private void finallyConnect(String networkPass, String networkSSID) {
+        WifiConfiguration wifiConfig = new WifiConfiguration();
+        wifiConfig.SSID = String.format("\"%s\"", networkSSID);
+        wifiConfig.preSharedKey = String.format("\"%s\"", networkPass);
+
+        // remember id
+        int netId = wifiManager.addNetwork(wifiConfig);
+        wifiManager.disconnect();
+        wifiManager.enableNetwork(netId, true);
+        wifiManager.reconnect();
+
+        WifiConfiguration conf = new WifiConfiguration();
+        conf.SSID = "\"\"" + networkSSID + "\"\"";
+        conf.preSharedKey = "\"" + networkPass + "\"";
+        wifiManager.addNetwork(conf);
+    }
+
 }
