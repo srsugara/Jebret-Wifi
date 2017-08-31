@@ -73,7 +73,9 @@ public class WifiFragment extends Fragment {
                 List<ScanResult> wifiScanList = wifiManager.getScanResults();
                 wifis = new String[wifiScanList.size()];
                 for(int i = 0; i < wifiScanList.size(); i++){
+                    int level = WifiManager.calculateSignalLevel(wifiScanList.get(i).level,5);
                     wifis[i] = ((wifiScanList.get(i)).toString());
+                    System.out.println("Level is " + level + " out of 5");
                 }
                 String filtered[] = new String[wifiScanList.size()];
                 int counter = 0;
