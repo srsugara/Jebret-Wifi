@@ -12,6 +12,7 @@ import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,9 +52,9 @@ public class WifiFragment extends Fragment {
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                // selected item
+                // selected wifi
                 String ssid = ((TextView) view).getText().toString();
-                connectToWifi(ssid);
+                connectToWifi(ssid.substring(22).trim());
                 Toast.makeText(getActivity(),"Wifi SSID : "+ssid,Toast.LENGTH_SHORT).show();
 
             }
@@ -73,15 +74,13 @@ public class WifiFragment extends Fragment {
                 List<ScanResult> wifiScanList = wifiManager.getScanResults();
                 wifis = new String[wifiScanList.size()];
                 for(int i = 0; i < wifiScanList.size(); i++){
-                    int level = WifiManager.calculateSignalLevel(wifiScanList.get(i).level,5);
-                    wifis[i] = ((wifiScanList.get(i)).toString());
-                    System.out.println("Level is " + level + " out of 5");
+                    int level = WifiManager.calculateSignalLevel(wifiScanList.get(i).level, 5);
+                    wifis[i] = "        Strength : "+level+"    "+((wifiScanList.get(i)).toString());
                 }
                 String filtered[] = new String[wifiScanList.size()];
                 int counter = 0;
                 for (String eachWifi : wifis) {
                     String[] temp = eachWifi.split(",");
-
                     filtered[counter] = temp[0].substring(5).trim();//+"\n" + temp[2].substring(12).trim()+"\n" +temp[3].substring(6).trim();//0->SSID, 2->Key Management 3-> Strength
 
                     counter++;
