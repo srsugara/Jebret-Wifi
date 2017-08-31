@@ -1,4 +1,4 @@
 # Jebret-Wifi
-Aplikasi sederhana untuk mendeteksi wifi dari device menggunakan native android.
+The simple apps to detect wifi around you.
 
 ## Still Progress ....
