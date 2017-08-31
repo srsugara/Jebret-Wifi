@@ -1,13 +1,46 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.task.efishery.jebretwifi.QRCodeFragment">
+    android:paddingBottom="16dp"
+    tools:context="com.task.efishery.jebretwifi.QRCodeFragment"
+    tools:showIn="@layout/activity_main">
 
-    <!-- TODO: Update blank fragment layout -->
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="QR Code Page" />
+        android:layout_marginTop="150dp"
+        android:id="@+id/tv_title"
+        android:layout_alignParentTop="true"
+        android:textColor="@color/status_text"
+        android:layout_centerHorizontal="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TWOH's Easy QR Scanner" />
 
-</FrameLayout>
+    <Button
+        android:layout_centerHorizontal="true"
+        android:text="Mulai Scan"
+        android:id="@+id/bt_scan"
+        android:layout_below="@id/tv_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        />
+
+    <TextView
+        android:layout_marginTop="50dp"
+        android:layout_below="@id/bt_scan"
+        android:id="@+id/tv_scanresult_title"
+        android:layout_centerHorizontal="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Hasil Scan : " />
+
+    <TextView
+        android:layout_below="@id/tv_scanresult_title"
+        android:id="@+id/tv_scanresult"
+        android:textColor="@color/colorPrimaryDark"
+        android:layout_centerHorizontal="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="_" />
+</RelativeLayout>
