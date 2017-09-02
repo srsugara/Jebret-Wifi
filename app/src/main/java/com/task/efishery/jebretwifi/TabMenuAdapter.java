@@ -16,14 +16,17 @@ public class TabMenuAdapter extends FragmentPagerAdapter {
         super(fm);
     }
 
-    public Fragment getItem(int num) {
+    public Fragment getItem(int position) {
         // Buat implementasi more fragment buat pengecekan disini
-        if(num == 1){
+        Fragment frag = null;
+        if(position == 0){
+            return new WifiFragment();
+        } else if(position == 1){
             return new QRCodeFragment();
-        } else if(num == 2){
+        } else if(position == 2){
             return new QuoteFragment();
         }
-        return new WifiFragment();
+        return frag;
     }
 
     @Override
