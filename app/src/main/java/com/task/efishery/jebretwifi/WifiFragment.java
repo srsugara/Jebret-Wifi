@@ -7,6 +7,8 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiManager;
@@ -32,6 +34,7 @@ import java.util.List;
 public class WifiFragment extends Fragment {
 
     WifiManager wifiManager;
+    NetworkInfo networkInfo;
     ListView list;
     String wifis[];
     EditText pass;
@@ -63,33 +66,44 @@ public class WifiFragment extends Fragment {
     }
 
     private void getWifi(){
-        IntentFilter filter = new IntentFilter();
-        filter.addAction(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION);
-        wifiManager =(WifiManager) getActivity().getApplicationContext().getSystemService(Context.WIFI_SERVICE);
-        getActivity().registerReceiver(new BroadcastReceiver(){
+        ConnectivityManager connMgr = (ConnectivityManager) getActivity().getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+        networkInfo = connMgr.getActiveNetworkInfo();
+        if (networkInfo != null && networkInfo.isConnected()) {
+            IntentFilter filter = new IntentFilter();
+            filter.addAction(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION);
+            wifiManager = (WifiManager) getActivity().getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+            if(wifiManager.isWifiEnabled()) {
+                getActivity().registerReceiver(new BroadcastReceiver() {
 
-            @SuppressLint("UseValueOf") @Override
-            public void onReceive(Context context, Intent intent) {
-                List<ScanResult> wifiScanList = wifiManager.getScanResults();
-                wifis = new String[wifiScanList.size()];
-                for(int i = 0; i < wifiScanList.size(); i++){
-                    int level = WifiManager.calculateSignalLevel(wifiScanList.get(i).level, 5);
-                    wifis[i] = "        Strength : "+level+"    "+((wifiScanList.get(i)).toString());
-                }
-                String filtered[] = new String[wifiScanList.size()];
-                int counter = 0;
-                for (String eachWifi : wifis) {
-                    String[] temp = eachWifi.split(",");
-                    filtered[counter] = temp[0].substring(5).trim();//+"\n" + temp[2].substring(12).trim()+"\n" +temp[3].substring(6).trim();//0->SSID, 2->Key Management 3-> Strength
+                    @SuppressLint("UseValueOf")
+                    @Override
+                    public void onReceive(Context context, Intent intent) {
+                        List<ScanResult> wifiScanList = wifiManager.getScanResults();
+                        wifis = new String[wifiScanList.size()];
+                        for (int i = 0; i < wifiScanList.size(); i++) {
+                            int level = WifiManager.calculateSignalLevel(wifiScanList.get(i).level, 5);
+                            wifis[i] = "        Strength : " + level + "    " + ((wifiScanList.get(i)).toString());
+                        }
+                        String filtered[] = new String[wifiScanList.size()];
+                        int counter = 0;
+                        for (String eachWifi : wifis) {
+                            String[] temp = eachWifi.split(",");
+                            filtered[counter] = temp[0].substring(5).trim();//+"\n" + temp[2].substring(12).trim()+"\n" +temp[3].substring(6).trim();//0->SSID, 2->Key Management 3-> Strength
 
-                    counter++;
+                            counter++;
 
-                }
-                list.setAdapter(new ArrayAdapter<String>(getActivity(),R.layout.list_item,R.id.label, filtered));
+                        }
+                        list.setAdapter(new ArrayAdapter<String>(getActivity(), R.layout.list_item, R.id.label, filtered));
+                    }
+
+                }, filter);
+                wifiManager.startScan();
+            } else {
+                Toast.makeText(getActivity(),"Please turn on your WIFI",Toast.LENGTH_LONG).show();
             }
-
-        },filter);
-        wifiManager.startScan();
+        } else{
+            Toast.makeText(getActivity(),"Please check your connection",Toast.LENGTH_LONG).show();
+        }
     }
 
     private void connectToWifi(final String wifiSSID) {
