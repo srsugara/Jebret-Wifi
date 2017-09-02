@@ -11,11 +11,11 @@
         android:layout_marginTop="150dp"
         android:id="@+id/tv_title"
         android:layout_alignParentTop="true"
-        android:textColor="@color/status_text"
+        android:textColor="@color/colorPrimaryDark"
         android:layout_centerHorizontal="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="TWOH's Easy QR Scanner" />
+        android:text="Connect WIFI using QR Code" />
 
     <Button
         android:layout_centerHorizontal="true"
