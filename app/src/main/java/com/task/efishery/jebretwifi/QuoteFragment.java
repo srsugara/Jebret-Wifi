@@ -15,6 +15,8 @@ import com.google.gson.GsonBuilder;
 import com.task.efishery.jebretwifi.interfaces.QuoteAPI;
 import com.task.efishery.jebretwifi.models.Quote;
 
+import java.io.IOException;
+
 import butterknife.ButterKnife;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -61,14 +63,27 @@ public class QuoteFragment extends Fragment {
         result.enqueue(new Callback<Quote>() {
             @Override
             public void onResponse(Call<Quote> call, Response<Quote> response) {
-                quoteText.setText(response.body().getQuoteText());
-                quoteAuthor.setText(response.body().getQuoteAuthor());
-                quoteLink.setText(response.body().getQuoteLink());
+                if(response.isSuccessful()) {
+                    quoteText.setText(response.body().getQuoteText());
+                    quoteAuthor.setText(response.body().getQuoteAuthor());
+                    quoteLink.setText(response.body().getQuoteLink());
+                } else {
+                    switch(response.code()) {
+                        case 404 :
+                            Toast.makeText(getContext(), "server returned error : user not found", Toast.LENGTH_SHORT).show();
+                            break;
+                        case 500 :
+                            Toast.makeText(getContext(), "server returned error : server is broken", Toast.LENGTH_SHORT).show();
+                            break;
+                        default :
+                            Toast.makeText(getContext(), "server returned error : unknown error", Toast.LENGTH_SHORT).show();
+                    }
+                }
             }
 
             @Override
             public void onFailure(Call<Quote> call, Throwable t) {
-                Toast.makeText(getContext(), " response bad " + t.getMessage(), Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), " on failure " + t.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
         return view;
