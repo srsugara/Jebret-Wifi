@@ -68,7 +68,7 @@ public class QRCodeFragment extends Fragment {
                 tvScanResult.setText(value);
                 connectToWifi(value);
             } else if (resultCode == Activity.RESULT_CANCELED) {
-                tvScanResult.setText("Scanning Gagal, mohon coba lagi.");
+                tvScanResult.setText("Scanning Failed, please try again.");
             }
         } else {
 
