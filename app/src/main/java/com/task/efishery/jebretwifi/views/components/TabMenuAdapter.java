@@ -1,8 +1,12 @@
-package com.task.efishery.jebretwifi;
+package com.task.efishery.jebretwifi.views.components;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+
+import com.task.efishery.jebretwifi.views.fragments.QRCodeFragment;
+import com.task.efishery.jebretwifi.views.fragments.QuoteFragment;
+import com.task.efishery.jebretwifi.views.fragments.WifiFragment;
 
 /**
  * Created by syauqi on 30/08/17.
