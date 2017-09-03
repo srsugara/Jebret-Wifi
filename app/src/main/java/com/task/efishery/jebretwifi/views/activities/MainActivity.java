@@ -1,4 +1,4 @@
-package com.task.efishery.jebretwifi;
+package com.task.efishery.jebretwifi.views.activities;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -8,6 +8,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import com.crashlytics.android.Crashlytics;
+import com.task.efishery.jebretwifi.views.fragments.QuoteFragment;
+import com.task.efishery.jebretwifi.R;
+import com.task.efishery.jebretwifi.views.components.TabMenuAdapter;
+
 import io.fabric.sdk.android.Fabric;
 import it.neokree.materialtabs.MaterialTab;
 import it.neokree.materialtabs.MaterialTabHost;
