@@ -1,4 +1,4 @@
-package com.task.efishery.jebretwifi;
+package com.task.efishery.jebretwifi.views.fragments;
 
 
 import android.app.Activity;
@@ -15,6 +15,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import com.task.efishery.jebretwifi.R;
 
 import info.vividcode.android.zxing.CaptureActivity;
 import info.vividcode.android.zxing.CaptureActivityIntents;

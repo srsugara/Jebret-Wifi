@@ -1,4 +1,4 @@
-package com.task.efishery.jebretwifi;
+package com.task.efishery.jebretwifi.views.fragments;
 
 
 import android.annotation.SuppressLint;
@@ -24,6 +24,8 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.task.efishery.jebretwifi.R;
 
 import java.util.List;
 
