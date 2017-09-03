@@ -29,17 +29,27 @@ import com.task.efishery.jebretwifi.R;
 
 import java.util.List;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+import butterknife.OnItemSelected;
+
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class WifiFragment extends Fragment {
 
+    @InjectView(R.id.listview)
+    ListView list;
+
+    TextView textSSID;
+    Button dialogButton;
+    EditText pass;
+    Dialog dialog;
+
     WifiManager wifiManager;
     NetworkInfo networkInfo;
-    ListView list;
     String wifis[];
-    EditText pass;
 
     public WifiFragment() {
         // Required empty public constructor
@@ -51,7 +61,7 @@ public class WifiFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_wifi, container, false);
-        list=(ListView) view.findViewById(R.id.listview);
+        ButterKnife.inject(this,view);
         getWifi();
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -109,13 +119,14 @@ public class WifiFragment extends Fragment {
     }
 
     private void connectToWifi(final String wifiSSID) {
-        final Dialog dialog = new Dialog(getActivity());
+        dialog = new Dialog(getActivity());
         dialog.setContentView(R.layout.dialog_connect);
         dialog.setTitle("Connect to Network");
-        TextView textSSID = (TextView) dialog.findViewById(R.id.textSSID1);
 
-        Button dialogButton = (Button) dialog.findViewById(R.id.okButton);
+        textSSID = dialog.findViewById(R.id.textSSID1);
+        dialogButton = (Button) dialog.findViewById(R.id.okButton);
         pass = (EditText) dialog.findViewById(R.id.textPassword);
+
         textSSID.setText(wifiSSID);
 
         // if button is clicked, connect to the network;

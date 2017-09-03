@@ -18,6 +18,9 @@ import android.widget.TextView;
 
 import com.task.efishery.jebretwifi.R;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+import butterknife.OnClick;
 import info.vividcode.android.zxing.CaptureActivity;
 import info.vividcode.android.zxing.CaptureActivityIntents;
 
@@ -27,10 +30,14 @@ import info.vividcode.android.zxing.CaptureActivityIntents;
  */
 public class QRCodeFragment extends Fragment {
 
+    @InjectView(R.id.tv_scanresult)
     TextView tvScanResult;
-    Button btScan;
+
+    TextView textSSID;
+    Button dialogButton;
     EditText pass;
     WifiManager wifiManager;
+    Dialog dialog;
 
     public QRCodeFragment() {
         // Required empty public constructor
@@ -41,25 +48,24 @@ public class QRCodeFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_qrcode, container, false);
-        tvScanResult = (TextView) view.findViewById(R.id.tv_scanresult);
-        btScan = (Button) view.findViewById(R.id.bt_scan);
+        ButterKnife.inject(this,view);
+
         wifiManager =(WifiManager) getActivity().getApplicationContext().getSystemService(Context.WIFI_SERVICE);
         wifiManager.startScan();
-        btScan.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
 
-                // Membuat intent baru untuk memanggil CaptureActivity bawaan ZXing
-                Intent captureIntent = new Intent(getActivity(), CaptureActivity.class);
-
-                // Kemudian kita mengeset pesan yang akan ditampilkan ke user saat menjalankan QRCode scanning
-                CaptureActivityIntents.setPromptMessage(captureIntent, "Barcode scanning...");
-
-                // Melakukan startActivityForResult, untuk menangkap balikan hasil dari QR Code scanning
-                startActivityForResult(captureIntent, 0);
-            }
-        });
         return view;
+    }
+
+    @OnClick(R.id.bt_scan)
+    public void onClickScan(){
+        // Membuat intent baru untuk memanggil CaptureActivity bawaan ZXing
+        Intent captureIntent = new Intent(getActivity(), CaptureActivity.class);
+
+        // Kemudian kita mengeset pesan yang akan ditampilkan ke user saat menjalankan QRCode scanning
+        CaptureActivityIntents.setPromptMessage(captureIntent, "Barcode scanning...");
+
+        // Melakukan startActivityForResult, untuk menangkap balikan hasil dari QR Code scanning
+        startActivityForResult(captureIntent, 0);
     }
 
     @Override
@@ -79,12 +85,12 @@ public class QRCodeFragment extends Fragment {
     }
 
     private void connectToWifi(final String wifiSSID) {
-        final Dialog dialog = new Dialog(getActivity());
+        dialog = new Dialog(getActivity());
         dialog.setContentView(R.layout.dialog_connect);
         dialog.setTitle("Connect to Network");
-        TextView textSSID = (TextView) dialog.findViewById(R.id.textSSID1);
+        textSSID = (TextView) dialog.findViewById(R.id.textSSID1);
 
-        Button dialogButton = (Button) dialog.findViewById(R.id.okButton);
+        dialogButton = (Button) dialog.findViewById(R.id.okButton);
         pass = (EditText) dialog.findViewById(R.id.textPassword);
         textSSID.setText(wifiSSID);
 

@@ -53,6 +53,7 @@ public class QuoteFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_quote, container, false);
         ButterKnife.inject(this,view);
         ((JebretWifiApplication) getActivity().getApplication()).getJebretWifiComponent().inject(this);
+
         String method,lang,format;
         method = getResources().getString(R.string.method);
         lang = getResources().getString(R.string.lang);

@@ -12,6 +12,8 @@ import com.task.efishery.jebretwifi.views.fragments.QuoteFragment;
 import com.task.efishery.jebretwifi.R;
 import com.task.efishery.jebretwifi.views.components.TabMenuAdapter;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 import io.fabric.sdk.android.Fabric;
 import it.neokree.materialtabs.MaterialTab;
 import it.neokree.materialtabs.MaterialTabHost;
@@ -19,24 +21,24 @@ import it.neokree.materialtabs.MaterialTabListener;
 
 public class MainActivity extends AppCompatActivity implements MaterialTabListener {
 
+    @InjectView(R.id.tabHost)
     MaterialTabHost tabHost;
+    @InjectView(R.id.viewPager)
     ViewPager viewPager;
-    TabMenuAdapter androidAdapter;
+    @InjectView(R.id.toolBar)
     Toolbar toolBar;
+
+    TabMenuAdapter androidAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Fabric.with(this, new Crashlytics());
         setContentView(R.layout.activity_main);
+        ButterKnife.inject(this);
 
         //android toolbar
-        toolBar = (android.support.v7.widget.Toolbar) this.findViewById(R.id.toolBar);
         this.setSupportActionBar(toolBar);
-
-        //tab host
-        tabHost = (MaterialTabHost) this.findViewById(R.id.tabHost);
-        viewPager = (ViewPager) this.findViewById(R.id.viewPager);
 
         //adapter view
         androidAdapter = new TabMenuAdapter(getSupportFragmentManager());
@@ -57,6 +59,8 @@ public class MainActivity extends AppCompatActivity implements MaterialTabListen
             );
         }
     }
+
+
 
     //tab on selected
     @Override
