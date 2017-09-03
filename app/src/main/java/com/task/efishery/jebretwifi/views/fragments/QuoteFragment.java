@@ -1,9 +1,8 @@
-package com.task.efishery.jebretwifi;
+package com.task.efishery.jebretwifi.views.fragments;
 
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,10 +11,12 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.task.efishery.jebretwifi.R;
+import com.task.efishery.jebretwifi.dagger.JebretWifiApplication;
 import com.task.efishery.jebretwifi.interfaces.QuoteAPI;
 import com.task.efishery.jebretwifi.models.Quote;
 
-import java.io.IOException;
+import javax.inject.Inject;
 
 import butterknife.ButterKnife;
 import retrofit2.Call;
@@ -37,6 +38,8 @@ public class QuoteFragment extends Fragment {
     TextView quoteAuthor;
     @InjectView(R.id.tv_quote_link)
     TextView quoteLink;
+    @Inject
+    Retrofit retrofit;
 
     public QuoteFragment() {
         // Required empty public constructor
@@ -49,15 +52,11 @@ public class QuoteFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_quote, container, false);
         ButterKnife.inject(this,view);
-        Gson gson = new GsonBuilder().create();
+        ((JebretWifiApplication) getActivity().getApplication()).getJebretWifiComponent().inject(this);
         String method,lang,format;
         method = getResources().getString(R.string.method);
         lang = getResources().getString(R.string.lang);
         format = getResources().getString(R.string.format);
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(getResources().getString(R.string.base_url))
-                .addConverterFactory(GsonConverterFactory.create(gson))
-                .build();
         QuoteAPI quoteAPI = retrofit.create(QuoteAPI.class);
         Call<Quote> result = quoteAPI.getQuote(method,lang,format);
         result.enqueue(new Callback<Quote>() {
