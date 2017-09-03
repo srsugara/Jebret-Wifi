@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:paddingBottom="16dp"
     android:background="#212121"
-    tools:context="com.task.efishery.jebretwifi.MainActivity">
+    tools:context="com.task.efishery.jebretwifi.views.activities.MainActivity">
 
     <ListView
     android:id="@+id/listview"

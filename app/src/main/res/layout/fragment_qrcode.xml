@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingBottom="16dp"
-    tools:context="com.task.efishery.jebretwifi.QRCodeFragment"
+    tools:context="com.task.efishery.jebretwifi.views.fragments.QRCodeFragment"
     tools:showIn="@layout/activity_main">
 
     <TextView
