@@ -13,7 +13,9 @@ import android.net.wifi.ScanResult;
 import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,9 +28,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.task.efishery.jebretwifi.R;
+import com.task.efishery.jebretwifi.models.Connection;
 import com.task.efishery.jebretwifi.views.activities.MainActivity;
-import com.task.efishery.jebretwifi.views.components.CustomListAdapter;
+import com.task.efishery.jebretwifi.views.components.ConnectionListAdapter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.ButterKnife;
@@ -53,11 +57,19 @@ public class WifiFragment extends Fragment {
     String wifis[];
     int strengths[];
     Boolean securities[];
+    List<Connection> connections = new ArrayList<>();
+    ConnectionListAdapter adapter;
+
 
     public WifiFragment() {
         // Required empty public constructor
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        adapter = new ConnectionListAdapter(getActivity(), connections);
+    }
 
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container,
@@ -65,16 +77,24 @@ public class WifiFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_wifi, container, false);
         ButterKnife.inject(this,view);
-        getWifi();
+        list.setAdapter(adapter);
+
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
                 // selected wifi
-                Boolean security = securities[position];
-                TextView label = (TextView) view.findViewById(R.id.label);
+                Connection connection = (Connection) adapter.getItem(position);
+
+
+
+                TextView label = view.findViewById(R.id.label);
+
                 String ssid = label.getText().toString();
-                connectToWifi(ssid,security,position);
-                Toast.makeText(getActivity(),"Wifi SSID : "+ssid,Toast.LENGTH_SHORT).show();
+                if(connection.getIsConnected()){
+                    Toast.makeText(getContext(), "You have been connected", Toast.LENGTH_SHORT).show();
+                }else {
+                    connectToWifi(ssid, connection.getIsWPA(), position);
+                }
 
             }
         });
@@ -82,7 +102,16 @@ public class WifiFragment extends Fragment {
         return view;
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        getWifi();
+    }
+
     private void getWifi(){
+        connections.clear();
+        adapter.notifyDataSetChanged();
+
         ConnectivityManager connMgr = (ConnectivityManager) getActivity().getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
         networkInfo = connMgr.getActiveNetworkInfo();
         IntentFilter filter = new IntentFilter();
@@ -94,31 +123,35 @@ public class WifiFragment extends Fragment {
                 @SuppressLint("UseValueOf")
                 @Override
                 public void onReceive(Context context, Intent intent) {
+                    connections.clear();
+                    adapter.notifyDataSetChanged();
+
                     List<ScanResult> wifiScanList = wifiManager.getScanResults();
                     securities = new Boolean[wifiScanList.size()];;
-                    wifis = new String[wifiScanList.size()];
-                    strengths = new int[wifiScanList.size()];
-                    for (int i = 0; i < wifiScanList.size(); i++) {
-                        int level = WifiManager.calculateSignalLevel(wifiScanList.get(i).level, 4);
-                        String capabilities = wifiScanList.get(i).capabilities;
-                        if(capabilities.contains("WPA2-PSK")){
-                            securities[i] = true;
-                        } else if(capabilities.contains("ESS")){
-                            securities[i] = false;
+
+                    for (ScanResult scanResult : wifiScanList) {
+
+                        int level = WifiManager.calculateSignalLevel(scanResult.level, 4);
+                        String wifi;
+                        boolean isWPA = false;
+                        String capabilities = scanResult.capabilities;
+                        boolean isConnected = false;
+                        if(("\""+scanResult.SSID+"\"").equals(wifiManager.getConnectionInfo().getSSID().toString())){
+                            isConnected = true;
                         }
-                        wifis[i] = ((wifiScanList.get(i)).toString());
-                        strengths[i] = level;
-                    }
-                    String filtered[] = new String[wifiScanList.size()];
 
-                    int counter = 0;
-                    for (String eachWifi : wifis) {
-                        String[] temp = eachWifi.split(",");
-                        filtered[counter] = temp[0].substring(5).trim();//+"\n" + temp[2].substring(12).trim()+"\n" +temp[3].substring(6).trim();//0->SSID, 2->Key Management 3-> Strength
-                        counter++;
+                        if(capabilities.contains("WPA2-PSK")){
+                            isWPA = true;
+                        } else if(capabilities.contains("ESS")){
+                            isWPA = false;
+                        }
+                        wifi = ((scanResult).toString());
+                        String[] temp = wifi.split(",");
+                        String wifiName = temp[0].substring(5).trim();
 
+                        connections.add(new Connection(wifiName,level,isWPA,isConnected));
                     }
-                    list.setAdapter(new CustomListAdapter((MainActivity) getActivity(),filtered, strengths));
+                    adapter.notifyDataSetChanged();
                 }
 
             }, filter);
@@ -128,15 +161,15 @@ public class WifiFragment extends Fragment {
         }
     }
 
-    private void connectToWifi(final String wifiSSID, Boolean security, final int position) {
-        if(security) {
+    private void connectToWifi(final String wifiSSID, Boolean isWPA, final int position) {
+        if(isWPA) {
             dialog = new Dialog(getActivity());
             dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
             dialog.setContentView(R.layout.dialog_connect);
             TextView tv = dialog.findViewById(R.id.title_dialog);
             tv.setText("Connect to " + wifiSSID);
-            dialogButton = (Button) dialog.findViewById(R.id.okButton);
-            pass = (EditText) dialog.findViewById(R.id.textPassword);
+            dialogButton = dialog.findViewById(R.id.okButton);
+            pass = dialog.findViewById(R.id.textPassword);
 
             // if button is clicked, connect to the network;
             dialogButton.setOnClickListener(new View.OnClickListener() {
@@ -149,37 +182,31 @@ public class WifiFragment extends Fragment {
             });
             dialog.show();
         } else{
-            WifiConfiguration wifiConfig = new WifiConfiguration();
-            wifiConfig.SSID = String.format("\"%s\"", wifiSSID);
-
-            wifiConfig.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.NONE);
-            int netId = wifiManager.addNetwork(wifiConfig);
-            wifiManager.disconnect();
-            wifiManager.enableNetwork(netId, true);
-            wifiManager.reconnect();
-
-            WifiConfiguration conf = new WifiConfiguration();
-            conf.SSID = "\"\"" + wifiSSID + "\"\"";
-            wifiManager.addNetwork(conf);
+            tryConnect(wifiSSID,"",position);
         }
     }
 
-    private void finallyConnect(String networkPass, String networkSSID,int position) {
-        WifiConfiguration wifiConfig = new WifiConfiguration();
-        wifiConfig.SSID = String.format("\"%s\"", networkSSID);
-        wifiConfig.preSharedKey = String.format("\"%s\"", networkPass);
+    private void finallyConnect(String networkPass, String wifiSSID,int position) {
         // remember id
+        tryConnect(wifiSSID,networkPass,position);
+    }
+
+    private void tryConnect(String wifiSSID, String wifiPass, int position){
+
+        WifiConfiguration wifiConfig = new WifiConfiguration();
+        wifiConfig.SSID = String.format("\"%s\"", wifiSSID);
+        wifiConfig.preSharedKey = String.format("\"%s\"", wifiPass);
+        if(wifiPass.equals("")) {
+            wifiConfig.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.NONE);
+        }else{
+            wifiConfig.preSharedKey = "\"" + wifiPass + "\"";
+        }
         int netId = wifiManager.addNetwork(wifiConfig);
         wifiManager.disconnect();
         wifiManager.enableNetwork(netId, true);
         wifiManager.reconnect();
 
-        WifiConfiguration conf = new WifiConfiguration();
-        conf.SSID = "\"\"" + networkSSID + "\"\"";
-        conf.preSharedKey = "\"" + networkPass + "\"";
-        wifiManager.addNetwork(conf);
 
-        list.getAdapter().getItem(position);
     }
 
 }
