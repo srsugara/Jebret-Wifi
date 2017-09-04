@@ -3,22 +3,36 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:gravity="center"
+    android:background="#212121"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp"
     tools:context="com.task.efishery.jebretwifi.views.fragments.QuoteFragment">
 
     <!-- TODO: Update blank fragment layout -->
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/iv_profile"
+        android:layout_marginBottom="10dp"/>
     <TextView
         android:id="@+id/tv_quote_text"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:textSize="20dp"
+        android:textColor="@color/colorWhite"
+        android:textStyle="bold"
+        android:layout_marginBottom="15dp"/>
 
     <TextView
         android:id="@+id/tv_quote_author"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:textSize="15dp"
+        android:textColor="@color/colorWhite"
+        android:textStyle="italic"/>
 
-    <TextView
-        android:id="@+id/tv_quote_link"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
 
 </LinearLayout>
