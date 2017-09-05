@@ -7,24 +7,34 @@
     android:paddingTop="16dp"
     android:paddingLeft="16dp"
     android:paddingRight="16dp"
+    android:background="@color/colorWhite"
     tools:context="com.task.efishery.jebretwifi.views.activities.MainActivity">
 
+
     <TextView
-        android:id="@+id/textSSID1"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:id="@+id/title_dialog"
+        android:textColor="@color/colorBlack"
+        android:textSize="20dp"
+        android:textStyle="bold"
+        android:layout_marginBottom="5dp"/>
 
     <EditText
         android:id="@+id/textPassword"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/textSSID1"
-        android:layout_marginTop="5dp"/>
+        android:layout_marginBottom="5dp"
+        android:textColor="@color/colorBlack"
+        android:inputType="textPassword"
+        android:layout_below="@+id/title_dialog"/>
 
     <Button
         android:id="@+id/okButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/textPassword"
-        android:text="Connect"/>
+        android:text="Connect"
+        android:textColor="@color/colorWhite"
+        android:background="@color/colorPrimary"/>
 </RelativeLayout>

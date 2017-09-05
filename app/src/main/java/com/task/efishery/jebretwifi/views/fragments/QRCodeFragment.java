@@ -12,6 +12,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -33,7 +34,6 @@ public class QRCodeFragment extends Fragment {
     @InjectView(R.id.tv_scanresult)
     TextView tvScanResult;
 
-    TextView textSSID;
     Button dialogButton;
     EditText pass;
     WifiManager wifiManager;
@@ -86,13 +86,12 @@ public class QRCodeFragment extends Fragment {
 
     private void connectToWifi(final String wifiSSID) {
         dialog = new Dialog(getActivity());
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.dialog_connect);
-        dialog.setTitle("Connect to Network");
-        textSSID = (TextView) dialog.findViewById(R.id.textSSID1);
-
+        TextView tv = dialog.findViewById(R.id.title_dialog);
+        tv.setText("Connect to " + wifiSSID);
         dialogButton = (Button) dialog.findViewById(R.id.okButton);
         pass = (EditText) dialog.findViewById(R.id.textPassword);
-        textSSID.setText(wifiSSID);
 
         // if button is clicked, connect to the network;
         dialogButton.setOnClickListener(new View.OnClickListener() {

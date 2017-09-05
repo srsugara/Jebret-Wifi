@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingBottom="16dp"
+    android:background="#212121"
     tools:context="com.task.efishery.jebretwifi.views.fragments.QRCodeFragment"
     tools:showIn="@layout/activity_main">
 
@@ -11,36 +12,43 @@
         android:layout_marginTop="150dp"
         android:id="@+id/tv_title"
         android:layout_alignParentTop="true"
-        android:textColor="@color/colorPrimaryDark"
+        android:textColor="@color/colorAccent"
         android:layout_centerHorizontal="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Connect WIFI using QR Code" />
+        android:text="Connect WIFI using QR Code"
+        android:textSize="10dp"
+        android:layout_marginBottom="20dp"/>
 
     <Button
         android:layout_centerHorizontal="true"
         android:text="Mulai Scan"
+        android:textColor="@color/colorWhite"
         android:id="@+id/bt_scan"
         android:layout_below="@id/tv_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
         />
 
     <TextView
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="30dp"
         android:layout_below="@id/bt_scan"
         android:id="@+id/tv_scanresult_title"
         android:layout_centerHorizontal="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hasil Scan : " />
+        android:text="Hasil Scan : "
+        android:textSize="20dp"
+        android:textColor="@color/colorWhite"/>
 
     <TextView
         android:layout_below="@id/tv_scanresult_title"
         android:id="@+id/tv_scanresult"
-        android:textColor="@color/colorPrimaryDark"
+        android:textColor="@color/colorAccent"
         android:layout_centerHorizontal="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="_" />
+        android:text="________"
+        android:textSize="20dp"/>
 </RelativeLayout>

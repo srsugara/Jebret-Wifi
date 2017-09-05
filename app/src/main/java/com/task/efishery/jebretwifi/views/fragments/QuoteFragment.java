@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,8 +37,8 @@ public class QuoteFragment extends Fragment {
     TextView quoteText;
     @InjectView(R.id.tv_quote_author)
     TextView quoteAuthor;
-    @InjectView(R.id.tv_quote_link)
-    TextView quoteLink;
+    @InjectView(R.id.iv_profile)
+    ImageView ivProfile;
     @Inject
     Retrofit retrofit;
 
@@ -64,9 +65,9 @@ public class QuoteFragment extends Fragment {
             @Override
             public void onResponse(Call<Quote> call, Response<Quote> response) {
                 if(response.isSuccessful()) {
-                    quoteText.setText(response.body().getQuoteText());
-                    quoteAuthor.setText(response.body().getQuoteAuthor());
-                    quoteLink.setText(response.body().getQuoteLink());
+                    ivProfile.setImageResource(R.drawable.boy);
+                    quoteText.setText('"'+response.body().getQuoteText()+'"');
+                    quoteAuthor.setText("~ "+response.body().getQuoteAuthor()+" ~");
                 } else {
                     switch(response.code()) {
                         case 404 :
