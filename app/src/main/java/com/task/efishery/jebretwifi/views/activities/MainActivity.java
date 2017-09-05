@@ -39,10 +39,11 @@ public class MainActivity extends AppCompatActivity implements MaterialTabListen
     @InjectView(R.id.toolBar)
     Toolbar toolBar;
 
-    TabMenuAdapter androidAdapter;
-    public static final int ACCESS_COARSE_LOCATION = 100;
-    public static final int CAMERA = 101;
-    public static final int ACCESS_FINE_LOCATION = 102;
+    private TabMenuAdapter androidAdapter;
+
+    private static final int ACCESS_COARSE_LOCATION = 100;
+    private static final int CAMERA = 101;
+    private static final int ACCESS_FINE_LOCATION = 102;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,7 +80,7 @@ public class MainActivity extends AppCompatActivity implements MaterialTabListen
     /**
      * Check permission
      */
-    private void doCheckPermissions() {
+    public void doCheckPermissions() {
         if (isAccessesGranted()) {
             gettingPermissions();
         }
@@ -89,7 +90,7 @@ public class MainActivity extends AppCompatActivity implements MaterialTabListen
      * Check if our app has all required access
      * @return boolean
      */
-    private boolean isAccessesGranted() {
+    public boolean isAccessesGranted() {
         int granted = PackageManager.PERMISSION_GRANTED;
         return ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != granted
                 || ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != granted
@@ -99,7 +100,7 @@ public class MainActivity extends AppCompatActivity implements MaterialTabListen
     /**
      * Get required permission
      */
-    private void gettingPermissions() {
+    public void gettingPermissions() {
         Map<String, Integer> permissions = new HashMap<>();
         permissions.put(Manifest.permission.ACCESS_COARSE_LOCATION, ACCESS_COARSE_LOCATION);
         permissions.put(Manifest.permission.CAMERA, CAMERA);
@@ -121,7 +122,7 @@ public class MainActivity extends AppCompatActivity implements MaterialTabListen
      * @param permission
      * @param requestCode
      */
-    private void requestAccess(String permission, int requestCode) {
+    public void requestAccess(String permission, int requestCode) {
         ActivityCompat.requestPermissions(this, new String[]{permission}, requestCode );
     }
 
@@ -135,10 +136,10 @@ public class MainActivity extends AppCompatActivity implements MaterialTabListen
             case ACCESS_FINE_LOCATION:
             default:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    Toast.makeText(MainActivity.this,"kjbvkjd",Toast.LENGTH_LONG).show();
+                    Toast.makeText(MainActivity.this,"kjbvkjd",Toast.LENGTH_SHORT).show();
                 } else {
                     // TODO: disable functionality that needs this permissions
-                    Toast.makeText(MainActivity.this,"Access Denied",Toast.LENGTH_LONG).show();
+                    Toast.makeText(MainActivity.this,"Access Denied",Toast.LENGTH_SHORT).show();
                 }
                 doCheckPermissions();
                 break;

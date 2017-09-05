@@ -34,10 +34,7 @@ public class QRCodeFragment extends Fragment {
     @InjectView(R.id.tv_scanresult)
     TextView tvScanResult;
 
-    Button dialogButton;
-    EditText pass;
-    WifiManager wifiManager;
-    Dialog dialog;
+    private WifiManager wifiManager;
 
     public QRCodeFragment() {
         // Required empty public constructor
@@ -78,13 +75,15 @@ public class QRCodeFragment extends Fragment {
             } else if (resultCode == Activity.RESULT_CANCELED) {
                 tvScanResult.setText("Scanning Failed, please try again.");
             }
-        } else {
-
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-    private void connectToWifi(final String wifiSSID) {
+    public void connectToWifi(final String wifiSSID) {
+        Button dialogButton;
+        final EditText pass;
+        final Dialog dialog;
+
         dialog = new Dialog(getActivity());
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.dialog_connect);
@@ -105,7 +104,7 @@ public class QRCodeFragment extends Fragment {
         dialog.show();
     }
 
-    private void finallyConnect(String networkPass, String networkSSID) {
+    public void finallyConnect(String networkPass, String networkSSID) {
         WifiConfiguration wifiConfig = new WifiConfiguration();
         wifiConfig.SSID = String.format("\"%s\"", networkSSID);
         wifiConfig.preSharedKey = String.format("\"%s\"", networkPass);
@@ -115,11 +114,6 @@ public class QRCodeFragment extends Fragment {
         wifiManager.disconnect();
         wifiManager.enableNetwork(netId, true);
         wifiManager.reconnect();
-
-        WifiConfiguration conf = new WifiConfiguration();
-        conf.SSID = "\"\"" + networkSSID + "\"\"";
-        conf.preSharedKey = "\"" + networkPass + "\"";
-        wifiManager.addNetwork(conf);
     }
 
 }

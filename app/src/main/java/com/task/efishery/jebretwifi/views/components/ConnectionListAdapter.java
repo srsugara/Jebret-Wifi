@@ -18,10 +18,10 @@ import java.util.List;
  */
 
 public class ConnectionListAdapter extends BaseAdapter{
-    Context context;
+    private Context context;
     private List<Connection> connections;
-
     private static LayoutInflater inflater=null;
+
     public ConnectionListAdapter(Context context, List<Connection> connections) {
         // TODO Auto-generated constructor stub
         this.connections=connections;
@@ -29,6 +29,7 @@ public class ConnectionListAdapter extends BaseAdapter{
         inflater = ( LayoutInflater )context.
                 getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
+
     @Override
     public int getCount() {
         // TODO Auto-generated method stub
@@ -49,26 +50,28 @@ public class ConnectionListAdapter extends BaseAdapter{
 
     public class Holder
     {
-        TextView tvLabel;
-        SignalView signalView;
-        TextView connected;
+        private TextView tvLabel;
+        private SignalView signalView;
+        private TextView connected;
     }
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
         // TODO Auto-generated method stub
-        Holder holder=new Holder();
+        Holder holder;
+        Connection connection;
         View rowView;
+
+        holder = new Holder();
+        connection = (Connection) getItem(position);
         rowView = inflater.inflate(R.layout.list_item, null);
 
-        Connection connection = (Connection) getItem(position);
-
-        holder.signalView = (SignalView) rowView.findViewById(R.id.signal_view);
+        holder.signalView = rowView.findViewById(R.id.signal_view);
         holder.signalView.setLevel(connection.getStrength());
 
-        holder.tvLabel=(TextView) rowView.findViewById(R.id.label);
+        holder.tvLabel=rowView.findViewById(R.id.label);
         holder.tvLabel.setText(connection.getName());
 
-        holder.connected = (TextView) rowView.findViewById(R.id.tv_connected);
+        holder.connected = rowView.findViewById(R.id.tv_connected);
         if(connection.getIsConnected() == true ) {
             holder.connected.setText("connected");
         }else {

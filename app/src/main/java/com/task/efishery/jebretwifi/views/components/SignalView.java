@@ -14,14 +14,14 @@ import com.task.efishery.jebretwifi.R;
  */
 
 public class SignalView extends View {
-    Bitmap ic_signal_0 = BitmapFactory.decodeResource(getResources(), R.drawable.ic_signal_wifi_0_bar_white_24dp);
-    Bitmap ic_signal_1 = BitmapFactory.decodeResource(getResources(), R.drawable.ic_signal_wifi_1_bar_white_24dp);
-    Bitmap ic_signal_2 = BitmapFactory.decodeResource(getResources(), R.drawable.ic_signal_wifi_2_bar_white_24dp);
-    Bitmap ic_signal_3 = BitmapFactory.decodeResource(getResources(), R.drawable.ic_signal_wifi_3_bar_white_24dp);
-    Bitmap ic_signal_4 = BitmapFactory.decodeResource(getResources(), R.drawable.ic_signal_wifi_4_bar_white_24dp);
-    Bitmap ic_signal_off = BitmapFactory.decodeResource(getResources(), R.drawable.ic_signal_wifi_off_white_24dp);
+    private final Bitmap ic_signal_0 = BitmapFactory.decodeResource(getResources(), R.drawable.ic_signal_wifi_0_bar_white_24dp);
+    private final Bitmap ic_signal_1 = BitmapFactory.decodeResource(getResources(), R.drawable.ic_signal_wifi_1_bar_white_24dp);
+    private final Bitmap ic_signal_2 = BitmapFactory.decodeResource(getResources(), R.drawable.ic_signal_wifi_2_bar_white_24dp);
+    private final Bitmap ic_signal_3 = BitmapFactory.decodeResource(getResources(), R.drawable.ic_signal_wifi_3_bar_white_24dp);
+    private final Bitmap ic_signal_4 = BitmapFactory.decodeResource(getResources(), R.drawable.ic_signal_wifi_4_bar_white_24dp);
+    private final Bitmap ic_signal_off = BitmapFactory.decodeResource(getResources(), R.drawable.ic_signal_wifi_off_white_24dp);
 
-    Bitmap ic_current = ic_signal_off;
+    private Bitmap ic_current = ic_signal_off;
 
     public void setLevel(int value){
 

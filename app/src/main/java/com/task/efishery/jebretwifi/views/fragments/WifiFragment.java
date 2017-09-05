@@ -47,11 +47,6 @@ public class WifiFragment extends Fragment {
     @InjectView(R.id.listview)
     ListView list;
 
-    TextView textSSID;
-    Button dialogButton;
-    EditText pass;
-    Dialog dialog;
-
     WifiManager wifiManager;
     NetworkInfo networkInfo;
     String wifis[];
@@ -161,6 +156,10 @@ public class WifiFragment extends Fragment {
 
     private void connectToWifi(final String wifiSSID, Boolean isWPA, final int position) {
         if(isWPA) {
+            Button dialogButton;
+            final EditText pass;
+            final Dialog dialog;
+
             dialog = new Dialog(getActivity());
             dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
             dialog.setContentView(R.layout.dialog_connect);
