@@ -176,22 +176,17 @@ public class WifiFragment extends Fragment {
                 @Override
                 public void onClick(View v) {
                     String checkPassword = pass.getText().toString();
-                    finallyConnect(checkPassword, wifiSSID,position);
+                    finallyConnect(wifiSSID,checkPassword,position);
                     dialog.dismiss();
                 }
             });
             dialog.show();
         } else{
-            tryConnect(wifiSSID,"",position);
+            finallyConnect(wifiSSID,"",position);
         }
     }
 
-    private void finallyConnect(String networkPass, String wifiSSID,int position) {
-        // remember id
-        tryConnect(wifiSSID,networkPass,position);
-    }
-
-    private void tryConnect(String wifiSSID, String wifiPass, int position){
+    private void finallyConnect(String wifiSSID, String wifiPass, int position){
 
         WifiConfiguration wifiConfig = new WifiConfiguration();
         wifiConfig.SSID = String.format("\"%s\"", wifiSSID);
@@ -205,7 +200,6 @@ public class WifiFragment extends Fragment {
         wifiManager.disconnect();
         wifiManager.enableNetwork(netId, true);
         wifiManager.reconnect();
-
 
     }
 
