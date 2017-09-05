@@ -10,7 +10,7 @@ Steps for trying out this apps:
  - There are 3 tabs : WIFI, QRCODE, and QUOTE
  - WIFI Tab : this tab contain the list wifi around you and you can connect to that wifi
  - QRCODE Tab : this tab use to connect wifi with scan qr code
- - QUOTE Tab : this tab contain the data quote from [API Forismatic](http://api.forismatic.com/api/1.0/?method=getQuote&lang=en&format=json)
+ - QUOTE Tab : this tab contain the random quote from [API Forismatic](http://api.forismatic.com/api/1.0/?method=getQuote&lang=en&format=json)
  
 
 ## Pre-requisites
@@ -27,6 +27,10 @@ Steps for trying out this apps:
  
 ## Screenshots
 
-<img style="float: right;" src="http://i.imgur.com/AOEUqaY.jpg">
-
+<img src="http://i.imgur.com/ZUQARAx.png">
+<img src="http://i.imgur.com/583eHcU.png">
+<img src="http://i.imgur.com/NjwPvOY.png">
+<img src="http://i.imgur.com/2TgeQ7u.png">
+<img src="http://i.imgur.com/nstBaLQ.jpg">
+<img src="http://i.imgur.com/TAscVB1.png">
 
