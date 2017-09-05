@@ -27,10 +27,11 @@ Steps for trying out this apps:
  
 ## Screenshots
 
-<img src="http://i.imgur.com/ZUQARAx.png">
-<img src="http://i.imgur.com/583eHcU.png">
-<img src="http://i.imgur.com/NjwPvOY.png">
-<img src="http://i.imgur.com/2TgeQ7u.png">
-<img src="http://i.imgur.com/nstBaLQ.jpg">
-<img src="http://i.imgur.com/TAscVB1.png">
+| <img src="http://i.imgur.com/ZUQARAx.png">  | <img src="http://i.imgur.com/583eHcU.png"> | <img src="http://i.imgur.com/2TgeQ7u.png"> |
+|:---:|:---:|:---:|
+| WIFI Page | QRCode Page | Scan QR Code |
+
+| <img src="http://i.imgur.com/nstBaLQ.jpg">  | <img src="http://i.imgur.com/NjwPvOY.png"> | <img src="http://i.imgur.com/TAscVB1.png"> |
+|:---:|:---:|:---:|
+| Dialog Connect | Result Scan | Quote Page |
 
