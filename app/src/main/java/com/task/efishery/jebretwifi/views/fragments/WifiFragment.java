@@ -82,19 +82,17 @@ public class WifiFragment extends Fragment {
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                // selected wifi
-                Connection connection = (Connection) adapter.getItem(position);
+            // selected wifi
+            Connection connection = (Connection) adapter.getItem(position);
 
+            TextView label = view.findViewById(R.id.label);
 
-
-                TextView label = view.findViewById(R.id.label);
-
-                String ssid = label.getText().toString();
-                if(connection.getIsConnected()){
-                    Toast.makeText(getContext(), "You have been connected", Toast.LENGTH_SHORT).show();
-                }else {
-                    connectToWifi(ssid, connection.getIsWPA(), position);
-                }
+            String ssid = label.getText().toString();
+            if(connection.getIsConnected()){
+                Toast.makeText(getContext(), "You have been connected", Toast.LENGTH_SHORT).show();
+            }else {
+                connectToWifi(ssid, connection.getIsWPA(), position);
+            }
 
             }
         });
@@ -123,35 +121,35 @@ public class WifiFragment extends Fragment {
                 @SuppressLint("UseValueOf")
                 @Override
                 public void onReceive(Context context, Intent intent) {
-                    connections.clear();
-                    adapter.notifyDataSetChanged();
+                connections.clear();
+                adapter.notifyDataSetChanged();
 
-                    List<ScanResult> wifiScanList = wifiManager.getScanResults();
-                    securities = new Boolean[wifiScanList.size()];;
+                List<ScanResult> wifiScanList = wifiManager.getScanResults();
+                securities = new Boolean[wifiScanList.size()];;
 
-                    for (ScanResult scanResult : wifiScanList) {
+                for (ScanResult scanResult : wifiScanList) {
 
-                        int level = WifiManager.calculateSignalLevel(scanResult.level, 4);
-                        String wifi;
-                        boolean isWPA = false;
-                        String capabilities = scanResult.capabilities;
-                        boolean isConnected = false;
-                        if(("\""+scanResult.SSID+"\"").equals(wifiManager.getConnectionInfo().getSSID().toString())){
-                            isConnected = true;
-                        }
-
-                        if(capabilities.contains("WPA2-PSK")){
-                            isWPA = true;
-                        } else if(capabilities.contains("ESS")){
-                            isWPA = false;
-                        }
-                        wifi = ((scanResult).toString());
-                        String[] temp = wifi.split(",");
-                        String wifiName = temp[0].substring(5).trim();
-
-                        connections.add(new Connection(wifiName,level,isWPA,isConnected));
+                    int level = WifiManager.calculateSignalLevel(scanResult.level, 4);
+                    String wifi;
+                    boolean isWPA = false;
+                    String capabilities = scanResult.capabilities;
+                    boolean isConnected = false;
+                    if(("\""+scanResult.SSID+"\"").equals(wifiManager.getConnectionInfo().getSSID().toString())){
+                        isConnected = true;
                     }
-                    adapter.notifyDataSetChanged();
+
+                    if(capabilities.contains("WPA")){
+                        isWPA = true;
+                    } else if(capabilities.contains("ESS")){
+                        isWPA = false;
+                    }
+                    wifi = ((scanResult).toString());
+                    String[] temp = wifi.split(",");
+                    String wifiName = temp[0].substring(5).trim();
+
+                    connections.add(new Connection(wifiName,level,isWPA,isConnected));
+                }
+                adapter.notifyDataSetChanged();
                 }
 
             }, filter);
@@ -190,7 +188,6 @@ public class WifiFragment extends Fragment {
 
         WifiConfiguration wifiConfig = new WifiConfiguration();
         wifiConfig.SSID = String.format("\"%s\"", wifiSSID);
-        wifiConfig.preSharedKey = String.format("\"%s\"", wifiPass);
         if(wifiPass.equals("")) {
             wifiConfig.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.NONE);
         }else{
