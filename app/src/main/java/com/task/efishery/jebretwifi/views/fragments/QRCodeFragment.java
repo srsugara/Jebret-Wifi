@@ -89,8 +89,8 @@ public class QRCodeFragment extends Fragment {
         dialog.setContentView(R.layout.dialog_connect);
         TextView tv = dialog.findViewById(R.id.title_dialog);
         tv.setText("Connect to " + wifiSSID);
-        dialogButton = (Button) dialog.findViewById(R.id.okButton);
-        pass = (EditText) dialog.findViewById(R.id.textPassword);
+        dialogButton = dialog.findViewById(R.id.okButton);
+        pass = dialog.findViewById(R.id.textPassword);
 
         // if button is clicked, connect to the network;
         dialogButton.setOnClickListener(new View.OnClickListener() {
@@ -107,7 +107,11 @@ public class QRCodeFragment extends Fragment {
     public void finallyConnect(String networkPass, String networkSSID) {
         WifiConfiguration wifiConfig = new WifiConfiguration();
         wifiConfig.SSID = String.format("\"%s\"", networkSSID);
-        wifiConfig.preSharedKey = String.format("\"%s\"", networkPass);
+        if(networkPass.equals("")) {
+            wifiConfig.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.NONE);
+        }else{
+            wifiConfig.preSharedKey = "\"" + networkPass + "\"";
+        }
 
         // remember id
         int netId = wifiManager.addNetwork(wifiConfig);
